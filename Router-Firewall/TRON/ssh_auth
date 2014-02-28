@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Settings for the Files
+AUTHFILE=/var/log/auth.log
+TMPBASE=/tmp
+TMPFAIL=$TMPBASE/auth.tmp.fail
+TMPIPS=$TMPBASE/auth.tmp.ips
+TMPIPSUNIQ=$TMPBASE/auth.ipsuniq
+
+# Clean up any existing tmp files
+rm -f "$TMPFAIL" "$TMPIPS" "$TMPIPSUNIQ"
+
+# Get all Failed Authentication Lines
+# Add sudo before grep if need be, such as on BSD system
+grep '[Aa]uthentication failure' "$AUTHFILE" > "$TMPFAIL"
+
+# Pull All the IPs out
+egrep -o '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' "$TMPFAIL" > "$TMPIPS"
+
+# Pull All Hostnames Out
+sed '/[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*/d' "$TMPFAIL" | \
+egrep -o "rhost=[0-9a-zA-Z?,.\-]+" | \
+sed 's/^rhost=//' >> "$TMPIPS"
+
+# Sort out Unique IPs
+sort -u "$TMPIPS" > "$TMPIPSUNIQ"
+
+# Count attacks from individual IPs And Output Results
+while read ip
+do
+echo "$(grep -c "$ip" "$TMPIPS") => $ip" 
+total=$(grep -c "$ip" "$TMPIPS")
+if(($total > 10));then
+echo "Added $ip to hosts.deny"
+echo "ALL: $ip" >> /etc/hosts.deny
+fi
+#"From: $(lynx -dump http://www.ip-adress.com/ip_tracer/?QRY=$ip|grep address|egrep 'city|state|country'|awk '{print $3,$4,$5,$6,$7,$8}'|sed 's\ip address flag \\'|sed 's\My\\')" 
+done < "$TMPIPSUNIQ" | sort -g
+echo
+echo Total Unique IPs: $(cat "$TMPIPSUNIQ" | wc -l)
+echo Total Authentication Failures: $(cat "$TMPIPS" | wc -l)
+#echo Unique IPs: $("$TMPUPSUNIQ" | less) 
