@@ -1,0 +1,63 @@
+######
+# last modified: 2013/07/31
+######
+
+id user								# get additional user information
+groupadd group						# create a new group
+groupdel group						# delete a group
+gpasswd -a user group				# add a user to a group
+gpasswd -d user group				# remove a user from a group
+
+# wireless
+ip link set wlan0 up				# turn on wireless
+iwlist wlan0 scanning | less		# scan for access points
+iwconfig wlan0 essid <ssid>			# associate with access point
+wpa_supplicant -B -i wlan0 -c /etc/<config> 
+dhcpcd -A wlan0						# get ip address
+
+netctl start <profile>
+netctl enable <profile>				# enable a netctl profile
+netctl disable <profile>
+netctl reenable <profile>
+netctl switch-to <profile>
+wifi-menu wlan0 					# list all wireless networks
+									# profile dir: /etc/netctl
+                                    
+lspci                               # display pci hardware information                                    
+conky                               # display hardware information
+alsa-mixer                          # sound levels
+acpi                                # display batter levels
+
+tonicpoint                          # view ppt files
+
+zsh-newuser-install -f
+
+# CTAGS (used with vim and taglist)
+ctags *.filetype					# generate filename tags to be used with vim and taglist
+	ta <func, var, class>			# go to the specified function var class in vim
+	ts								# show the list
+	tn								# go to next tag in the list
+	tp								# go to previous tag in the list
+	tf								# go to first function in the list
+	tl								# go to the last function in the list
+	ctr+] <curson on function>		# go to the function definition	
+	ctr+t 							# return to origional function
+
+# TAGBAR plugin for vim
+	<F8>							# open the tag bar (uses ctags)
+
+# TAGLIST plugin for vim
+	TlistOpen							# open the list of functions
+	TlistToggle							# open the list of functions, without scope
+
+# CSCOPE plugin for vim
+	cscope -R <directory>			# create tags recursively for directory and subdirectories
+	ctrl-\<s>
+	ctrl-\<g>
+
+# net command replacements
+netstat --> ss
+netstat -r --> ip route
+netstat -i  --> ip -s link
+netstat -g  --> ip maddr
+netstat -tuna --> ???

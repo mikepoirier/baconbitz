@@ -1,0 +1,191 @@
+###
+modified: 2013/07/10
+###
+
+CompizConfig Settings Manager
+ccsm            opens the compizconfig settings manager window
+
+FILE COMMANDS
+ls		directory listing
+		-all formatted listing w/ hidden files
+
+cd dir		change directory to _
+		without dir, change to home folder
+
+cdl dir		change directory and list contents
+
+pwd		show current directory
+mkdir		makes a new directory (folder)
+mkdirc		makes a new directory, cd into it, and list contents
+rm dir		removes (deletes) file _
+		-r deletes dir (recursive delete)
+		-f force 
+		-rf force del dir
+
+cp f1 f2	copy f1 to f2
+		-r dir1 dir2 copy dir1 to dir2, creates dir2
+
+mv f1 f2	rename or moves f1 to f2
+
+mvmult d1 d2 rgx  move multiple files requires two directories
+		  the regular expresion is optional   
+wrproc process  search for and output the specified running process
+cat f1		reads file
+	/proc/cpuinfo cpu info
+	/proc/meminfo memory info
+
+cat > f1	places standard input into file
+more f1		outputs file contents
+head f1		outputs first 10 lines of file
+tail f1		outputs last 10 lines of file
+cut option f1   outputs file, cuts sections from each line of lines
+	-d delimeter
+	
+SEARCHING
+grep pat f1	search for pat (pattern) in files (f1)
+grep -r pat f1	Same for directory of files
+grep -Fxvf file1 file2		compare the contents of two files
+cmd | grep 	search for pat in command output
+locate f1	find all instances of file
+
+SYSTEM INFO
+adduser		creates a new user
+chpass		edit user information
+date		shows date
+cal		shows month's calendar
+uptime		show current uptime
+w		displays who is online, and last time on server
+whoami		Current user login
+finger user	displays info about user
+man cmd		Show the manual for use of command
+df		disk usage
+du		dir space usage
+free		shows memory and swap usage
+which app	shows proper default program
+whereis app	shows possible locations of app
+lscpu       get cpu information
+
+FOR GHOST USERS
+tty             determine current tty
+ps -fu  user    show user info
+kill -HUP id    kill a user
+
+app file	open file with application
+web site	open website site with web browser web
+
+COMPRESSION
+tar cf f1.tar f1 - create a tar named file.tar containing files
+tar xf file.tar - extract files from file.tar
+tar czf file.tar.gz - files creates a tar with gzip compression
+tar xzf file.tar.gz - extract a tar using gzip
+tar cjf file.tar.bz2 - create a tar with bzip2 compression
+tar xjf file.tar.bz2 - extract a tar with bzip2
+gzip file - compresses file and rename it to file.gz
+gzip -d file.gz - decompresses file.gz back to file
+
+PROCESS MANAGEMENT
+ps		displays current active processes
+	-ef	displays all processes running
+htop            interactive live process manager
+top		liver process manager
+kill pid	kill process id pid
+killall proc	kill all processes named proc (be careful)
+bg		lists stopped or background jobs, resumes a job in bg
+fg		brings most recent job to foreground
+fg n 		brings job n to the foreground
+
+INSTALLATION
+install from source
+./configure
+make
+make install
+
+dpkg -i pkg.dep		install a package debian (Ubuntu like)
+rpm -Uvh pkg.rpm	install a package (RPM Redhat)
+apt-get install app	install a package from depositary (debian)
+
+FILE PERMISSION
+chmod		octal file, change permissions of file to octal
+	4-read
+	2-write
+	1-execute
+	ex] chmod 777 - r,w,x for all
+	    chmod 755 - r,w,x for owner, r,x for group and world
+
+GIT HUB
+git clone $webserver download from server
+git status 	check the status of the project files
+git commit	creates snapshot of project
+git push	sends project to server
+
+NETWORKING
+ping host	ping host and output results | ends only with ctrl c
+whois domain	get whois info for domain
+dig domain	get DNS info for domain
+	-x host	reverse lookup host
+wget file	download file
+wget -c file 	continue a stopped download
+tcpdump		displays TCP traffic on current network
+nmap            network mapper tool
+          -A -v -sS ipaddress
+	      -sP ipadress/ceiling
+nmap --script=http-methods.nse --script-args http-methods.retest=1 <target>
+netstat		displays network connections, routing tables, int stats, network processes
+		-tulnap shows ports in use
+route		displays routing, changes tables
+ifconfig 	displays network interface status
+iwlist -scan	lists wifi networks in area
+iwconfig essid	sets target essid (network name)
+dhclient	requests network for ip address
+scp filePath user@host:folder 
+ssh user@ip
+mosh		mobile shell (ssh replacement)
+netstat -ap
+netstat -a | egrep 'Proto|LISTEN'    list all open ports
+netstat -F                           display all forwarding
+netcat
+ftp
+tcpdump -i wlan0 -nnvvXSs 1514        capture all packets
+iptables -I INPUT -p <target> -dport <port#> -j DROP  closes the desired port
+iptables -I INPUT -p tcp --dport 110 -j DROP
+iptables -I INPUT -i eth1 -p tcp --dport 20 -s 192.168.1.154 -j DROP (or ACCEPT)
+iptables -D INPUT -n --line-numbers  list all the rules
+iptables -D INPUT d0                 delete the numbered rule
+iptables -I INPUT -p tcp -s 192.168.1.0/24 --dport 80 -j ACCEPT   allow only ip on subnet
+service iptables save  saves iptable setup permanantly
+
+SERVER
+ssh		secure shell - access to another un*x computer's terminal
+telnet		telephone net - old windows command prompt control
+scp		secure copy - copy files over from different hosts
+nc		net cat - shows files like cat over another computer
+	-l port	            listen on port number
+   ip port	            connect to "server" with -l cmd running
+cat f1 | nc -l port	    send file over nc
+nc ip port > f1		    recieve file from above
+nc -z ip p1-p0	        port scanner
+					    BTW nc dict.org 2628 = good dictionary
+
+
+BACKTRACK
+airmon-ng int start	start network monitoring interface using int interface (normally wlan0)
+airodump-ng
+airocrack-ng
+
+
+SHORTCUTS
+Ctrl + c	halts the current command
+Ctrl + z	stops the current command, resume with fg or bg
+Ctrl + d	logs out current session
+Ctrl + w	erases one word in the current line
+Ctrl + u	erases the whole line
+Ctrl + r	type to bring up a recent command
+!!		    repeats the last command
+exit		log out of current session
+
+openssl aes-256-cbc -salt -e < remote_mac | nc 192.168.0.8 9999        encrypt data to send over netcat
+nc -l -p 9999 | openssl aes-256-cbc -salt -d > file                    decrypt data sent to netcat server
+
+# key generation stuff
+ssh-keygen -t rsa -b 4096
+ssh-copy-id -i <public key> -n <dryrun> -p <port> <user@host>
